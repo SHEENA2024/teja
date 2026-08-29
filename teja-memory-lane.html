@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Teja's Memory Universe 🎀</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Great+Vibes&family=Caveat:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* =============================================
+     ✏️ You generally won't need to edit this CSS.
+     Scroll down to the <script> tag to edit content.
+     ============================================= */
+  :root{
+    --pink-50:#fff5fa; --pink-100:#ffe4f1; --pink-200:#ffc9e3; --pink-300:#ffa3cf;
+    --pink-400:#ff6fb3; --pink-500:#ff3d97; --pink-600:#e91e82; --pink-700:#c2136a; --pink-900:#7a0e46;
+    --gold:#f3d58c; --lavender:#e9def8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;overflow-x:hidden;scroll-behavior:smooth;}
+  body{
+    font-family:'Poppins',sans-serif; color:var(--pink-900); background:var(--pink-50);
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(255,255,255,.6) 0, transparent 40%),
+      radial-gradient(circle at 80% 60%, rgba(255,255,255,.5) 0, transparent 40%);
+    min-height:100vh;
+  }
+  .hand{font-family:'Caveat',cursive;}
+  .display{font-family:'Playfair Display',serif;}
+  .script{font-family:'Great Vibes',cursive;}
+  button{font-family:inherit; cursor:pointer; border:none;}
+  img,svg{max-width:100%;}
+
+  /* background T + S wallpaper */
+  .ts-bg{
+    position:fixed; inset:0; z-index:-1; opacity:.55; pointer-events:none;
+    background-image: repeating-linear-gradient(0deg, transparent 0 40px, rgba(233,30,130,.05) 40px 41px);
+  }
+  .ts-bg span{
+    position:absolute; font-family:'Playfair Display',serif; color:var(--pink-600); opacity:.10; font-size:22px; user-select:none;
+  }
+
+  /* floating sparkles */
+  .sparkles{position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0;}
+  .sparkles span{position:absolute; opacity:.5; animation:floaty linear infinite;}
+  @keyframes floaty{
+    0%,100%{transform:translateY(0) rotate(0deg);}
+    50%{transform:translateY(-22px) rotate(8deg);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+  }
+
+  /* ---------- INTRO ---------- */
+  #intro{
+    position:fixed; inset:0; z-index:50; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:24px; gap:22px;
+    background:linear-gradient(180deg, var(--pink-50), #ffffff 55%, var(--lavender));
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  #intro.leaving{opacity:0; transform:scale(1.08); pointer-events:none;}
+  #intro .skip{
+    position:absolute; top:18px; right:18px; background:none; color:var(--pink-500);
+    font-size:12px; text-decoration:underline; text-underline-offset:2px;
+  }
+  .intro-line{font-family:'Caveat',cursive; font-size:26px; color:var(--pink-700); opacity:0; transform:translateY(10px); transition:all .8s ease;}
+  .intro-line.show{opacity:1; transform:translateY(0);}
+  #intro-name{
+    font-family:'Playfair Display',serif; font-weight:700; font-size:min(18vw,96px);
+    background:linear-gradient(90deg,#e91e82,#ffb6d9,#f3d58c,#e91e82); background-size:200% auto;
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    animation:shimmer 6s linear infinite; opacity:0; transform:scale(.7); transition:all .8s cubic-bezier(.34,1.56,.64,1);
+  }
+  #intro-name.show{opacity:1; transform:scale(1);}
+  @keyframes shimmer{0%{background-position:0% 50%;}100%{background-position:200% 50%;}}
+  #intro-age{
+    width:110px;height:110px;border-radius:50%; background:var(--pink-500); color:#fff;
+    display:flex;align-items:center;justify-content:center; font-family:'Playfair Display',serif; font-weight:700; font-size:44px;
+    box-shadow:0 12px 30px rgba(255,61,151,.4); opacity:0; transform:scale(.5); transition:all .7s cubic-bezier(.34,1.56,.64,1);
+  }
+  #intro-age.show{opacity:1; transform:scale(1);}
+  #intro-byline{font-family:'Caveat',cursive; font-size:22px; color:var(--pink-600); opacity:0; transform:translateY(10px); transition:all .8s ease;}
+  #intro-byline.show{opacity:1; transform:translateY(0);}
+  #enter-btn{
+    opacity:0; transform:translateY(14px); transition:all .6s ease;
+    background:linear-gradient(90deg,var(--pink-500),var(--pink-400)); color:#fff; font-weight:600;
+    padding:14px 34px; border-radius:999px; font-size:16px; box-shadow:0 10px 25px rgba(255,61,151,.4);
+  }
+  #enter-btn.show{opacity:1; transform:translateY(0);}
+  #enter-btn:hover{transform:scale(1.05);}
+  #enter-btn:active{transform:scale(.94);}
+
+  /* ---------- MEMORY LANE ---------- */
+  #memoryLane{display:none; min-height:100vh; padding:70px 20px 60px;}
+  #memoryLane.show{display:block;}
+  .ml-header{text-align:center; max-width:640px; margin:0 auto 36px;}
+  .ml-header h1{font-family:'Playfair Display',serif; font-size:clamp(30px,6vw,46px); color:var(--pink-700); margin:0 0 6px;}
+  .ml-header p{font-family:'Caveat',cursive; font-size:22px; color:var(--pink-600); margin:0;}
+
+  .grid{
+    max-width:980px; margin:0 auto; display:grid; gap:26px;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  }
+  .polaroid{
+    background:#fffdf9; padding:10px 10px 32px; box-shadow:0 10px 25px -8px rgba(154,24,90,.35), 0 2px 6px rgba(0,0,0,.08);
+    cursor:pointer; transition:transform .3s ease; text-align:left; display:block; width:100%;
+  }
+  .polaroid:hover{transform:translateY(-6px) rotate(0deg) !important; z-index:2;}
+  .polaroid .photo{
+    aspect-ratio:1/1; width:100%; border-radius:2px; overflow:hidden;
+    background:linear-gradient(135deg,var(--pink-100),var(--lavender));
+    display:flex;align-items:center;justify-content:center; font-size:34px;
+  }
+  .polaroid .photo img{width:100%;height:100%;object-fit:cover;}
+  .polaroid .cap{font-family:'Caveat',cursive; font-size:19px; color:var(--pink-800); margin-top:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .polaroid .date{font-size:11px; color:var(--pink-400); margin-top:1px;}
+
+  #ml-more{
+    display:block; margin:52px auto 0; background:linear-gradient(90deg,var(--gold),var(--pink-300));
+    color:var(--pink-900); font-weight:600; padding:14px 34px; border-radius:999px; font-size:15px;
+    box-shadow:0 10px 22px rgba(243,213,140,.5); transition:transform .25s ease;
+  }
+  #ml-more:hover{transform:scale(1.05);}
+
+  /* modal */
+  #modal-overlay{
+    position:fixed; inset:0; z-index:60; display:none; align-items:center; justify-content:center; padding:18px;
+  }
+  #modal-overlay.show{display:flex;}
+  #modal-overlay .backdrop{position:absolute; inset:0; background:rgba(122,14,70,.5); backdrop-filter:blur(3px);}
+  #modal-box{
+    position:relative; z-index:1; width:100%; max-width:440px; max-height:82vh; overflow-y:auto;
+    background:repeating-linear-gradient(to bottom, rgba(255,61,151,.06) 0 1px, transparent 1px 34px), #fffaf3;
+    border-radius:22px; padding:22px; box-shadow:0 25px 60px rgba(122,14,70,.35);
+    transform:scale(.9); opacity:0; transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  #modal-overlay.show #modal-box{transform:scale(1); opacity:1;}
+  #modal-close{
+    position:absolute; top:10px; right:10px; background:rgba(255,255,255,.85); color:var(--pink-600);
+    width:32px;height:32px;border-radius:50%; font-size:16px; line-height:1;
+  }
+  #modal-photo{aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:linear-gradient(135deg,var(--pink-100),var(--lavender)); display:flex;align-items:center;justify-content:center; font-size:48px; margin-bottom:14px;}
+  #modal-photo img{width:100%;height:100%;object-fit:cover;}
+  #modal-date{font-size:11px; letter-spacing:.03em; text-transform:uppercase; color:var(--pink-500); font-weight:600;}
+  #modal-title{font-family:'Playfair Display',serif; font-size:22px; color:var(--pink-800); margin:4px 0 8px;}
+  #modal-desc{font-size:14px; line-height:1.6; color:rgba(122,14,70,.85); white-space:pre-line;}
+  #modal-quote{font-family:'Caveat',cursive; font-size:21px; color:var(--pink-600); margin-top:10px;}
+
+  /* ---------- ENDING ---------- */
+  #ending{
+    display:none; position:fixed; inset:0; z-index:70; flex-direction:column; align-items:center; justify-content:center;
+    gap:20px; text-align:center; padding:24px;
+    background:linear-gradient(180deg,#7a0e46,#c2136a 55%,#ff6fb3);
+    color:#fff;
+  }
+  #ending.show{display:flex;}
+  #ending .close{position:absolute; top:18px; right:18px; background:none; color:rgba(255,255,255,.75); font-size:12px; text-decoration:underline;}
+  .end-line{font-family:'Caveat',cursive; font-size:26px; opacity:0; transform:translateY(10px); transition:all .8s ease;}
+  .end-line.show{opacity:1; transform:translateY(0);}
+  #end-love{
+    font-family:'Playfair Display',serif; font-weight:700; font-size:clamp(34px,8vw,64px);
+    opacity:0; transform:scale(.7); transition:all .9s cubic-bezier(.34,1.56,.64,1);
+  }
+  #end-love.show{opacity:1; transform:scale(1);}
+  .end-signed{font-family:'Caveat',cursive; font-size:24px; opacity:0; transition:opacity .8s ease;}
+  .end-signed.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<div class="ts-bg" id="tsBg"></div>
+
+<!-- ============================================================
+     ✏️ EDIT THIS CONTENT — everything you'll want to change
+     is in the <script> block near the bottom of this file.
+     ============================================================ -->
+
+<!-- INTRO -->
+<section id="intro">
+  <button class="skip" id="skipBtn">Skip intro</button>
+  <div class="sparkles" id="introSparkles"></div>
+  <p class="intro-line" id="line1">✨ A little world made for one very special girl... ✨</p>
+  <h1 class="display" id="intro-name"></h1>
+  <div id="intro-age"></div>
+  <p class="intro-line" id="intro-byline"></p>
+  <button id="enter-btn">ENTER YOUR WORLD 🎀</button>
+</section>
+
+<!-- MEMORY LANE -->
+<section id="memoryLane">
+  <div class="ml-header">
+    <h1>Memory Lane 📸</h1>
+    <p>A little scrapbook of everything we've lived, so far.</p>
+  </div>
+  <div class="grid" id="ml-grid"></div>
+  <button id="ml-more">One more thing... 💗</button>
+</section>
+
+<!-- MODAL -->
+<div id="modal-overlay">
+  <div class="backdrop" id="modal-backdrop"></div>
+  <div id="modal-box">
+    <button id="modal-close">✕</button>
+    <div id="modal-photo"></div>
+    <p id="modal-date"></p>
+    <h3 id="modal-title"></h3>
+    <p id="modal-desc"></p>
+    <p id="modal-quote"></p>
+  </div>
+</div>
+
+<!-- ENDING -->
+<section id="ending">
+  <div class="sparkles" id="endingSparkles"></div>
+  <button class="close" id="endingClose">Close</button>
+  <p class="end-line" id="end1">This isn't the end.</p>
+  <p class="end-line" id="end2">It's just the beginning of the next chapter.</p>
+  <h1 id="end-love"></h1>
+  <p class="end-signed" id="endSigned"></p>
+</section>
+
+<script>
+/* ===================================================================
+   ✏️✏️✏️  EDIT EVERYTHING BELOW THIS LINE  ✏️✏️✏️
+   This is the only part of the file you should need to touch.
+   =================================================================== */
+
+// ---- Basic details ----
+const FRIEND_NAME = "Teja";
+const YOUR_NAME = "Sheena";
+const FRIEND_AGE = 20;
+
+// ---- Memory Lane cards ----
+// image: paste a direct image URL, or leave "" to show a placeholder icon
+// Any field can be left as "" (empty) to skip it.
+const memories = [
+  {
+    image: "school.jpeg",
+    date: "Some Random day in 12th, 2024",
+    title: "Maybe the last time we were classmates",
+    description: "You were upset that only I was standing near and others were far but even God thought that no matter who is not there, Sheena should be with her",
+    quote: ""
+  },
+  {
+    image: "home.jpeg",
+    date: "10 / 08/ 2024",
+    title: "Home sweet Home",
+    description: "We spent full day in home and it felt like sisters. But that august we were young kids but this august we are matured right? Wait ethuku matured aaganum lets be kids , lets be ourselves.",
+    quote: ""
+  },
+  {
+    image: "rain.jpeg",
+    date: "30 / 08 / 2024",
+    title: "Birthday Celebration",
+    description: "Its your birthday in 2024. We were dancing in rain, vlogging and doing every fun thing. That was one of the most happiest days of my life.",
+    quote: ""
+  },
+  {
+    image: "mgm.jpeg",
+    date: "06/ 07 / 2024",
+    title: "MGM Day",
+    description: "We were so happy that day, and you said you slept well that night. How nice would it be if everyday was MGM day but its only us?",
+    quote: ""
+  },
+  {
+    image: "pascah.jpeg",
+    date: "14 / 06 / 2025",
+    title: "Some time spent",
+    description: "We were together, we ate well, we danced well and when we grow lets recreate it often.",
+    quote: ""
+  },
+  {
+    image: "cloud.jpeg",
+    date: "30/08/2026",
+    title: "Here we are",
+    description: "Today is the day you are turning 20. The age 20 is quite special because you are coming out of teenagehood. All the best dear. Lets fight the path ahead, be happy. And never forget, you are born alone and will die alone, so its okay to live alone. Be with true and worthy people only. I am there for you so when things feel heavy , come to me to reduce your weight of heart",
+    quote: ""
+  },
+];
+
+// ---- Final ending message (shown after "One more thing...") ----
+const FINAL_LINE_1 = "This isn't the end.";
+const FINAL_LINE_2 = "It's just the beginning of the next chapter.";
+const FINAL_SIGNED = `With love, ${YOUR_NAME} 💗`;
+
+/* ===================================================================
+   Nothing below this line needs to be edited.
+   =================================================================== */
+
+document.getElementById("line1").textContent = "✨ A little world made for one very special girl... ✨";
+document.getElementById("intro-name").textContent = FRIEND_NAME.toUpperCase();
+document.getElementById("intro-age").textContent = FRIEND_AGE;
+document.getElementById("intro-byline").textContent = `A little memory universe created by ${YOUR_NAME} 💗`;
+document.getElementById("end1").textContent = FINAL_LINE_1;
+document.getElementById("end2").textContent = FINAL_LINE_2;
+document.getElementById("end-love").textContent = `I love you, ${FRIEND_NAME}. 💗`;
+document.getElementById("endSigned").textContent = FINAL_SIGNED;
+
+// ---- background T + S wallpaper ----
+(function buildBg(){
+  const bg = document.getElementById("tsBg");
+  for (let i = 0; i < 26; i++) {
+    const s = document.createElement("span");
+    s.textContent = i % 3 === 0 ? "🎀" : "T ♡ S";
+    s.style.left = Math.random() * 100 + "%";
+    s.style.top = Math.random() * 100 + "%";
+    bg.appendChild(s);
+  }
+})();
+
+// ---- floating sparkles (reused for intro + ending) ----
+function fillSparkles(container, count, glyphs) {
+  container.innerHTML = "";
+  for (let i = 0; i < count; i++) {
+    const s = document.createElement("span");
+    s.textContent = glyphs[i % glyphs.length];
+    s.style.left = Math.random() * 100 + "%";
+    s.style.top = Math.random() * 100 + "%";
+    s.style.fontSize = (12 + Math.random() * 16) + "px";
+    s.style.animationDuration = (5 + Math.random() * 5) + "s";
+    s.style.animationDelay = (Math.random() * 4) + "s";
+    container.appendChild(s);
+  }
+}
+fillSparkles(document.getElementById("introSparkles"), 14, ["✨","💗","⭐","🎀"]);
+
+// ---- intro sequence ----
+const introSteps = [
+  { el: "line1", t: 0 },
+  { el: "intro-name", t: 1600 },
+  { el: "intro-age", t: 3000 },
+  { el: "intro-byline", t: 4200 },
+  { el: "enter-btn", t: 5400 },
+];
+const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (reduced) {
+  introSteps.forEach(s => document.getElementById(s.el).classList.add("show"));
+} else {
+  introSteps.forEach(s => setTimeout(() => document.getElementById(s.el).classList.add("show"), s.t));
+}
+
+function enterSite() {
+  const intro = document.getElementById("intro");
+  intro.classList.add("leaving");
+  setTimeout(() => { intro.style.display = "none"; }, 700);
+  document.getElementById("memoryLane").classList.add("show");
+  window.scrollTo({ top: 0 });
+}
+document.getElementById("enter-btn").addEventListener("click", enterSite);
+document.getElementById("skipBtn").addEventListener("click", enterSite);
+
+// ---- build memory lane grid ----
+const grid = document.getElementById("ml-grid");
+const rotations = [-3, 2, -1.5, 3, -2.5, 1.5, -1, 2.5];
+memories.forEach((m, i) => {
+  const card = document.createElement("button");
+  card.className = "polaroid";
+  card.style.transform = `rotate(${rotations[i % rotations.length]}deg)`;
+  card.innerHTML = `
+    <div class="photo">${m.image ? `<img src="${m.image}" alt="${m.title}">` : "📷"}</div>
+    <div class="cap">${m.title}</div>
+    <div class="date">${m.date}</div>
+  `;
+  card.addEventListener("click", () => openModal(m));
+  grid.appendChild(card);
+});
+
+// ---- modal ----
+const overlay = document.getElementById("modal-overlay");
+function openModal(m) {
+  document.getElementById("modal-photo").innerHTML = m.image ? `<img src="${m.image}" alt="${m.title}">` : "📷";
+  document.getElementById("modal-date").textContent = m.date || "";
+  document.getElementById("modal-title").textContent = m.title || "";
+  document.getElementById("modal-desc").textContent = m.description || "";
+  document.getElementById("modal-quote").textContent = m.quote ? `“${m.quote}”` : "";
+  overlay.classList.add("show");
+}
+function closeModal() { overlay.classList.remove("show"); }
+document.getElementById("modal-close").addEventListener("click", closeModal);
+document.getElementById("modal-backdrop").addEventListener("click", closeModal);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") { closeModal(); closeEnding(); }
+});
+
+// ---- ending ----
+const ending = document.getElementById("ending");
+let endingPlayed = false;
+function openEnding() {
+  ending.classList.add("show");
+  if (!endingPlayed) {
+    fillSparkles(document.getElementById("endingSparkles"), 16, ["✨","💗","⭐"]);
+  }
+  const seq = [
+    { id: "end1", t: 200 },
+    { id: "end2", t: 1000 },
+    { id: "end-love", t: 1900 },
+    { id: "endSigned", t: 2900 },
+  ];
+  if (!endingPlayed) {
+    seq.forEach(s => setTimeout(() => document.getElementById(s.id).classList.add("show"), reduced ? 0 : s.t));
+    endingPlayed = true;
+  } else {
+    seq.forEach(s => document.getElementById(s.id).classList.add("show"));
+  }
+}
+function closeEnding() { ending.classList.remove("show"); }
+document.getElementById("ml-more").addEventListener("click", openEnding);
+document.getElementById("endingClose").addEventListener("click", closeEnding);
+</script>
+</body>
+</html>
